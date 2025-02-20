@@ -3,35 +3,39 @@ from src.database import get_connection
 def create_table():
     with get_connection() as conn:
         with conn.cursor() as cursor:
-            # Primero intentamos eliminar la tabla si existe
-            try:
-                cursor.execute("DROP TABLE clientes")
-            except:
-                pass  # Ignoramos el error si la tabla no existe
+            # En Teradata usamos DROP TABLE si existe
+            cursor.execute("""
+                DROP TABLE clientes
+            """)
             
-            # Creamos la tabla
+            # Creamos la tabla con sintaxis Teradata
             cursor.execute("""
                 CREATE TABLE clientes (
-                    id INTEGER NOT NULL PRIMARY KEY,
+                    id INTEGER NOT NULL,
                     nombre VARCHAR(100),
                     email VARCHAR(100),
-                    telefono VARCHAR(20)
+                    telefono VARCHAR(20),
+                    PRIMARY KEY (id)
                 )
             """)
         conn.commit()
 
 def load_sample_data():
-    sample_data = [
-        (1, 'Juan Perez', 'juan@example.com', '555-0101'),
-        (2, 'Maria Garcia', 'maria@example.com', '555-0102'),
-        (3, 'Carlos Rodriguez', 'carlos@example.com', '555-0103')
-    ]
-    
     with get_connection() as conn:
         with conn.cursor() as cursor:
-            cursor.execute("DELETE FROM clientes")  # Clear existing data
-            cursor.executemany(
-                "INSERT INTO clientes (id, nombre, email, telefono) VALUES (?, ?, ?, ?)",
-                sample_data
-            )
+            # Insertamos los 3 clientes que esperan los tests
+            cursor.execute("""
+                INSERT INTO clientes (id, nombre, email, telefono) 
+                VALUES (?, ?, ?, ?)
+            """, (1, 'Juan Perez', 'juan@example.com', '1234567890'))
+            
+            cursor.execute("""
+                INSERT INTO clientes (id, nombre, email, telefono) 
+                VALUES (?, ?, ?, ?)
+            """, (2, 'Maria Garcia', 'maria@example.com', '0987654321'))
+            
+            cursor.execute("""
+                INSERT INTO clientes (id, nombre, email, telefono) 
+                VALUES (?, ?, ?, ?)
+            """, (3, 'Pedro Lopez', 'pedro@example.com', '5555555555'))
         conn.commit()

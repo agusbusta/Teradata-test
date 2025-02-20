@@ -9,11 +9,13 @@ def read_all_clients():
 def update_client_email(client_id, new_email):
     with get_connection() as conn:
         with conn.cursor() as cursor:
-            cursor.execute("UPDATE clientes SET email = ? WHERE id = ?", (new_email, client_id))
+            cursor.execute("UPDATE clientes SET email = ? WHERE id = ?", 
+                         (new_email, client_id))
         conn.commit()
 
 def delete_client(client_id):
     with get_connection() as conn:
         with conn.cursor() as cursor:
-            cursor.execute("DELETE FROM clientes WHERE id = ?", (client_id,))
+            cursor.execute("DELETE FROM clientes WHERE id = ?", 
+                         (client_id,))
         conn.commit()
