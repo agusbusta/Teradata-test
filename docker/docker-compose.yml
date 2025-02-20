@@ -1,0 +1,17 @@
+version: '3.8'
+services:
+  teradata-sim:
+    image: postgres:13
+    environment:
+      POSTGRES_PASSWORD: mysecretpassword
+    ports:
+      - "5432:5432"
+
+  tests:
+    build: 
+      context: ..
+      dockerfile: Dockerfile
+    volumes:
+      - ../:/app
+    env_file:
+      - ../.env
