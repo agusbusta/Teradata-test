@@ -1,4 +1,4 @@
-Sistema de Gestión de Clientes con Teradata
+Teradata testing 
 ==========================================
 
 Este proyecto implementa un sistema básico de gestión de clientes utilizando Teradata como base de datos.
